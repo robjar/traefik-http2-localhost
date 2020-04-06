@@ -1,0 +1,22 @@
+version: '3.5'
+
+services:
+  reverse-proxy:
+    image: traefik:v2.2
+    command:
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --api.insecure
+      - --providers.file.directory=/config/
+      - --serverstransport.insecureskipverify=true
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    labels:
+      - "traefik.enable=true"
+
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - ./config/:/config/
+    network_mode: host

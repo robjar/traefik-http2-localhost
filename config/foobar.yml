@@ -1,0 +1,38 @@
+http:
+  routers:
+    router1:
+      rule: Path(`/foo`) 
+      service: service1
+      tls: {}
+      entryPoints:
+        - websecure
+
+    router2:
+      rule: Path(`/moo`)
+      service: service2
+      tls: {}
+      entryPoints:
+        - websecure
+
+  services:
+    service1:
+      loadBalancer:
+        servers:
+          - url: https://localhost:8085
+
+    service2:
+       loadBalancer:
+         servers: 
+           - url: https://localhost:8086
+
+tls:
+  certificates:
+    - certFile: /config/localhost-cert.pem
+      keyFile: /config/localhost-key.pem
+      stores:
+        - default
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /config/localhost-cert.pem
+        keyFile: /config/localhost-key.pem 
